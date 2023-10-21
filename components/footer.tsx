@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export function Footer() {
   return (
-    <footer className="bg-rose-600 flex justify-between px-2 py-1 fixed top-full -translate-y-full w-full">
+    <footer className="bg-rose-600 flex justify-between px-2 py-1 fixed top-full -translate-y-full w-full z-10">
       <Link href='/recipes/meals'>
         <ForkKnife size={32} fill='white' />
       </Link>

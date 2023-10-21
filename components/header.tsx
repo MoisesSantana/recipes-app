@@ -10,7 +10,7 @@ export function Header() {
   const noResearch = pathname.includes('/explore');
 
   return (
-    <header className="bg-rose-600 flex justify-between px-2 py-1 fixed w-full">
+    <header className="bg-rose-600 flex justify-between px-2 py-1 fixed w-full z-10">
       <Link href='/profile'>
         <UserCircle size={32} fill='white' />
       </Link>

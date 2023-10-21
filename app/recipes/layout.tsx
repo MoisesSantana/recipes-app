@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <div className='pt-[40px] bg-pink-50'>
+      <div className='py-[40px] bg-pink-50'>
         {children}
       </div>
       <Footer />

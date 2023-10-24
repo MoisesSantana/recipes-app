@@ -3,12 +3,12 @@ import { Recipe } from '../types';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 
-type CardProps = {
+type RecipeProps = {
   recipe: Recipe;
   mealOrDrink: string;
 }
 
-export function Card({ recipe, mealOrDrink }: CardProps) {
+export function RecipeCard({ recipe, mealOrDrink }: RecipeProps) {
   const pathname = usePathname();
   const url = `${pathname}/${recipe[`id${mealOrDrink}` as keyof Recipe]}`;
 

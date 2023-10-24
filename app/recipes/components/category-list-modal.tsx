@@ -8,12 +8,12 @@ import { useQuery } from 'react-query';
 import { CategoryBtn } from './category-btn';
 
 type CategoryListModalProps = {
-  setOpenModal: () => void;
+  setOpenCategoryModal: () => void;
   selectedCategory: string;
   handleCategory: (category: string) => void;
 }
 
-export function CategoryListModal({ setOpenModal, handleCategory, selectedCategory }:CategoryListModalProps) {
+export function CategoryListModal({ setOpenCategoryModal, handleCategory, selectedCategory }:CategoryListModalProps) {
   const pathname = usePathname();
   const dataKey = pathname.split('/')[2];
 
@@ -49,7 +49,7 @@ export function CategoryListModal({ setOpenModal, handleCategory, selectedCatego
       role="dialog"
       aria-modal="true"
       tabIndex={0}
-      onKeyDown={({ key }) => key === 'Escape' && setOpenModal()}
+      onKeyDown={({ key }) => key === 'Escape' && setOpenCategoryModal()}
     >
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -59,7 +59,7 @@ export function CategoryListModal({ setOpenModal, handleCategory, selectedCatego
               type="button"
               className="absolute right-2 top-2"
               aria-label="Close"
-              onClick={setOpenModal}
+              onClick={setOpenCategoryModal}
             >
               <X fill='red' size={24} weight='bold' />
             </button>

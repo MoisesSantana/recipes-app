@@ -28,22 +28,24 @@ export default function Home() {
   };
 
   const isDisabled = !formState.isValid;
-
+  console.log(isDisabled);
   return (
     <div className='bg-pink-50 min-h-screen h-full flex flex-col'>
       <h1 className='text-2xl font-black text-rose-600 fixed left-1/2 -translate-x-1/2 top-20 drop-shadow-md'>Recipes App</h1>
       <section className='w-full flex flex-1 items-center justify-center'>
         <form onSubmit={handleSubmit(handleSignIn)} className='flex flex-col w-full max-w-xl px-4'>
-          <label className='text-sm text-neutral-600 mb-1'>email</label>
+          <label className='text-sm text-neutral-600 mb-1' htmlFor='email'>email</label>
           <input
+            id='email'
             type="text"
             placeholder="example@email.com"
             required
             {...register('email')}
             className='mb-4 px-2 py-1 border border-neutral-300 rounded-md'
           />
-          <label className='text-sm text-neutral-600 mb-1'>password</label>
+          <label className='text-sm text-neutral-600 mb-1' htmlFor='pass'>password</label>
           <input
+            id='pass'
             type="password"
             required
             {...register('password')}

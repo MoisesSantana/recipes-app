@@ -1,3 +1,5 @@
+import { useModalStore } from '@/zustand/modal';
+
 type CategoryBtnProps = {
   children: string;
   selectedCategory: string;
@@ -5,6 +7,8 @@ type CategoryBtnProps = {
 }
 
 export function CategoryBtn({ children, selectedCategory, handleCategory }: CategoryBtnProps) {
+  const setCategoryModal = useModalStore((state) => state.setOpenCategoryModal);
+  
   let btnClassName = 'inline-flex justify-center rounded-md bg-rose-600 w-40 sm:w-52 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500';
   const regex = new RegExp('\\bbg-rose-600\\b', 'g');
   
@@ -12,7 +16,10 @@ export function CategoryBtn({ children, selectedCategory, handleCategory }: Cate
 
   return (
     <button
-      onClick={ () => handleCategory(children) }
+      onClick={ () => {
+        setCategoryModal();
+        handleCategory(children);
+      } }
       className={ btnClassName }
     >
       {children}

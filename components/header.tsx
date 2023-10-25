@@ -1,6 +1,6 @@
 'use client';
 
-import { useSearchModalStore } from '@/zustand/search-modal';
+import { useModalStore } from '@/zustand/modal';
 import { MagnifyingGlass, UserCircle } from '@phosphor-icons/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -9,7 +9,7 @@ export function Header() {
   const pathname = usePathname();
   const noResearch = pathname.includes('/explore');
 
-  const setOpenSearchModal = useSearchModalStore((state) => state.setOpenSearchModal);
+  const setOpenSearchModal = useModalStore((state) => state.setOpenSearchModal);
 
   return (
     <header className="bg-rose-600 flex justify-between px-2 py-1 fixed w-full z-10">

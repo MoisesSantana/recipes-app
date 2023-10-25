@@ -28,7 +28,6 @@ export default function Home() {
   };
 
   const isDisabled = !formState.isValid;
-  console.log(isDisabled);
   return (
     <div className='bg-pink-50 min-h-screen h-full flex flex-col'>
       <h1 className='text-2xl font-black text-rose-600 fixed left-1/2 -translate-x-1/2 top-20 drop-shadow-md'>Recipes App</h1>

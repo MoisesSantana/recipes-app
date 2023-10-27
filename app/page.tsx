@@ -16,7 +16,7 @@ type SignInFormSchemaType = z.infer<typeof signInFormSchema>;
 export default function Home() {
   const router = useRouter();
 
-  const { handleSubmit, register, formState } = useForm<SignInFormSchemaType>({
+  const { handleSubmit, register, formState,  } = useForm<SignInFormSchemaType>({
     resolver: zodResolver(signInFormSchema),
   });
 

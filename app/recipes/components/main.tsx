@@ -11,14 +11,30 @@ import { useModalStore } from '@/zustand/modal';
 import { SearchModal } from './search-modal';
 import { ModalContainer } from './modal-container';
 
+type Search = {
+  search: string;
+  searchType: string;
+}
+
 const queryClient = new QueryClient();
 
 export default function Main() {
   const [category, setCategory] = useState('All');
+  const [search, setSearch] = useState({ search: '', searchType: '' });
   const openSearchModal = useModalStore((state) => state.openSearchModal);
   const openCategoryModal = useModalStore((state) => state.openCategoryModal);
   const setOpenCategoryModal = useModalStore((state) => state.setOpenCategoryModal);
   const setOpenSearchModal = useModalStore((state) => state.setOpenSearchModal);
+
+  const handleCategory = (category: string) => {
+    setCategory(category);
+    setSearch({ search: '', searchType: '' });
+  };
+
+  const handleSearch = (search: Search) => {
+    setSearch(search);
+    setCategory('All');
+  };
 
   let currentModal: 'category' | 'search' | null = null;
   let currentSetModal: () => void = () => null;
@@ -48,17 +64,17 @@ export default function Main() {
       {
         openModal && (
           <ModalContainer title={currentModal} setOpenModal={currentSetModal}>
-            {currentModal === 'search' && <SearchModal />}
+            {currentModal === 'search' && <SearchModal handleSearch={handleSearch} />}
             {currentModal === 'category' && (
               <CategoryListModal
-                handleCategory={setCategory}
+                handleCategory={handleCategory}
                 selectedCategory={category}
               />
             )}
           </ModalContainer>
         )
       }
-      <RecipeList category={category} />
+      <RecipeList search={search} category={category} />
     </QueryClientProvider>
   );
 }

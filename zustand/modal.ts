@@ -8,7 +8,7 @@ type ModalState = {
 type ModalAction = {
   setOpenSearchModal: () => void;
   setOpenCategoryModal: () => void;
-}
+};
 
 export const useModalStore = create<ModalState & ModalAction>((set) => ({
   openSearchModal: false,

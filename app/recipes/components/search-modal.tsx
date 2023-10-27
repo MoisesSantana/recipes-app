@@ -1,8 +1,17 @@
 import { useModalStore } from '@/zustand/modal';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as z from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+
+type SearchType = {
+  search: string;
+  searchType: string;
+}
+
+type SearchModalProps = {
+  handleSearch: (search: SearchType) => void;
+}
 
 const searchFormSchema = z.object({
   search: z.string().min(1),
@@ -11,26 +20,45 @@ const searchFormSchema = z.object({
 
 type SearchFormSchemaType = z.infer<typeof searchFormSchema>;
 
-export function SearchModal() {
-  const { handleSubmit, register, formState, control } = useForm<SearchFormSchemaType>({
+export function SearchModal({ handleSearch }: SearchModalProps) {
+  const [searchValue, setSearchValue] = useState('');
+  const { handleSubmit, register, formState, control, watch } = useForm<SearchFormSchemaType>({
     resolver: zodResolver(searchFormSchema),
   });
 
-  const isDisabled = !formState.isValid;
+  const search = watch('search');
+  const searchType = watch('searchType');
 
-  const handleSubmitSearch = (data: SearchFormSchemaType) => {
-    console.log(data);
-  };
+  const isDisabled = !formState.isValid;
 
   const modalRef = useRef<HTMLDivElement>(null);
   const setOpenSearchModal = useModalStore((state) => state.setOpenSearchModal);
-
+  
   useEffect(() => {
     if (modalRef.current) {
       modalRef.current.focus();
     }
   }, []);
 
+  useEffect(() => {
+    if (search?.length > 1 && searchType === 'first-letter') {
+      setSearchValue(search.slice(0, 1));
+    }
+  }, [search, searchType]);
+
+  const handleSearchInputChange = (value: string) => {
+    if (search?.length > 1 && searchType === 'first-letter') {
+      setSearchValue(value.slice(0, 1));
+    } else {
+      setSearchValue(value);
+    }
+  };
+  
+  const handleSubmitSearch = (data: SearchFormSchemaType) => {
+    data.search = searchValue;
+    handleSearch(data);
+    setOpenSearchModal();
+  };
 
   return (
     <form onSubmit={handleSubmit(handleSubmitSearch)} className="bg-gray-50 flex-col px-4 py-3 flex sm:px-6 max-h-80 overflow-y-auto">
@@ -45,6 +73,8 @@ export function SearchModal() {
         type="text"
         id="search-input"
         {...register('search')}
+        value={searchValue}
+        onChange={(e) => handleSearchInputChange(e.target.value)}
       />
       <fieldset className='flex justify-between'>
         <Controller

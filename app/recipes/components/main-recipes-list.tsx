@@ -4,8 +4,8 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query';
-import { RecipeList } from '../components/recipe-list';
-import { CategoryListModal } from '../components/category-list-modal';
+import { RecipeList } from './recipe-list';
+import { CategoryListModal } from './category-list-modal';
 import { useState } from 'react';
 import { useModalStore } from '@/zustand/modal';
 import { SearchModal } from './search-modal';
@@ -18,7 +18,7 @@ type Search = {
 
 const queryClient = new QueryClient();
 
-export default function Main() {
+export default function MainRecipesList() {
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState({ search: '', searchType: '' });
   const openSearchModal = useModalStore((state) => state.openSearchModal);

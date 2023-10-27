@@ -1,5 +1,5 @@
-import Main from '../components/main';
+import MainRecipesList from '../components/main-recipes-list';
 
 export default function Drinks() {
-  return <Main />;
+  return <MainRecipesList />;
 }

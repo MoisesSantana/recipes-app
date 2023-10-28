@@ -42,24 +42,24 @@ export function MainRecipeDetails() {
   });
 
   return (
-    <main className='relative pb-12 flex flex-col md:flex-row md:h-[calc(100vh-80px)]'>
+    <main className='relative pb-12 flex flex-col md:flex-row md:items-center md:h-[calc(100vh-80px)]'>
       <Image
         src={recipe[`str${mealOrDrink}Thumb`]}
         alt={recipe[`str${mealOrDrink}`]}
         width={400}
         height={400}
         priority
-        className='w-full md:w-1/2 lg:w-1/3'
+        className='w-full md:w-80 md:h-72 md:ml-2 md:rounded-md lg:w-96 lg:h-80'
       />
-      <div className='px-2 md:w-1/2 lg:w-2/3 flex flex-col gap-8 justify-between'>
+      <div className='px-2 md:h-72 lg:h-80 flex flex-col md:gap-3 gap-8 justify-between'>
         <div className='border-b-2'>
           <h2 className='text-neutral-600 text-lg font-bold'>{recipe[`str${mealOrDrink}`]}</h2>
           <h3 className='text-neutral-600'>Category: {recipe.strCategory}</h3>
         </div>
       
-        <div className='overflow-y-auto'>
+        <div>
           <h3 className='text-neutral-600 text-lg font-bold'>Ingredients</h3>
-          <ul>
+          <ul className='overflow-y-auto md:h-20'>
             {
               ingredientsAndMeasures.map(({ ingredient, measure }: { ingredient: string, measure: string }) => (
                 <li className='text-neutral-600' key={`${ingredient}-${measure}`}>{ingredient} - {measure}</li>
@@ -70,7 +70,7 @@ export function MainRecipeDetails() {
 
         <div>
           <h3 className='text-neutral-600 text-lg font-bold'>Instructions</h3>
-          <div className='overflow-y-auto'>
+          <div className='overflow-y-auto md:h-20'>
             <p className='text-neutral-600'>{recipe.strInstructions}</p>
           </div>
         </div>

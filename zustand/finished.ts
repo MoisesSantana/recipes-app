@@ -1,24 +1,25 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { CurrentRecipe } from './types';
 
 
 type FinishedRecipesState = {
-  meals: string[];
-  drinks: string[];
+  meals: CurrentRecipe[];
+  drinks: CurrentRecipe[];
 };
 
 type FinishedRecipesAction = {
-  setMeals: (meals: string[]) => void;
-  setDrinks: (drinks: string[]) => void;
+  setMeals: (meals: CurrentRecipe[]) => void;
+  setDrinks: (drinks: CurrentRecipe[]) => void;
 }
 
 export const useFinishedStore = create<FinishedRecipesState & FinishedRecipesAction>()(
   persist(
     (set) => ({
       meals: [],
-      setMeals: (meals: string[]) => set(() => ({ meals })),
       drinks: [],
-      setDrinks: (drinks: string[]) => set(() => ({ drinks })),
+      setMeals: (meals: CurrentRecipe[]) => set(() => ({ meals })),
+      setDrinks: (drinks: CurrentRecipe[]) => set(() => ({ drinks })),
     }),
     {
       name: 'finished-recipes-storage',

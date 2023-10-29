@@ -1,9 +1,11 @@
 import { Error } from '@/components/error';
 import { Loading } from '@/components/loading';
 import { handleFetchRecipeDetails } from '@/services/fetch';
+import { useCurrentRecipe } from '@/zustand/current-recipe';
 import { useFinishedStore } from '@/zustand/finished';
 import Image from 'next/image';
 import { useParams, usePathname } from 'next/navigation';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
 type IngredientAndMeasureType = {
@@ -20,15 +22,32 @@ export function MainRecipeDetails() {
   const setFinishedMealsRecipes = useFinishedStore((state) => state.setMeals);
   const finishedDrinksRecipes = useFinishedStore((state) => state.drinks);
   const setFinishedDrinksRecipes = useFinishedStore((state) => state.setDrinks);
+  const setCurrentRecipe = useCurrentRecipe((state) => state.setCurrentRecipe);
 
   const finishedRecipes = dataKey === 'meals' ? finishedMealsRecipes : finishedDrinksRecipes;
   const setFinishedRecipes = dataKey === 'meals' ? setFinishedMealsRecipes : setFinishedDrinksRecipes;
 
+  
   const { isLoading, error, data } = useQuery(
     ['fetchRecipeDetails', pathname, id],
     () => handleFetchRecipeDetails(pathname, id as string),
   );
 
+  useEffect(() => {
+    if (!isLoading && !error && data) {
+      const [recipe] = data[dataKey];
+      const mealOrDrink = dataKey === 'meals' ? 'Meal' : 'Drink';
+  
+      const currentRecipe = {
+        id: recipe[`id${mealOrDrink}`],
+        name: recipe[`str${mealOrDrink}`],
+        thumb: recipe[`str${mealOrDrink}Thumb`],
+      };
+  
+      setCurrentRecipe(currentRecipe);
+    }
+  }, [isLoading]);
+    
   if (isLoading) return <Loading />;
   if (error) return <Error message='Request Error' />;
   const mealOrDrink = dataKey === 'meals' ? 'Meal' : 'Drink';
@@ -50,11 +69,17 @@ export function MainRecipeDetails() {
     };
   });
 
-  const isFinished = finishedRecipes.some((finishedRecipe) => finishedRecipe === id);
+  const isFinished = finishedRecipes.some((finishedRecipe) => finishedRecipe.id === id);
+
+  const currentRecipe = {
+    id: recipe[`id${mealOrDrink}`],
+    name: recipe[`str${mealOrDrink}`],
+    thumb: recipe[`str${mealOrDrink}Thumb`],
+  };
 
   const handleFinished = () => {
-    if (isFinished) setFinishedRecipes(finishedRecipes.filter((finishedRecipe) => finishedRecipe !== id));
-    else setFinishedRecipes([...finishedRecipes, id as string]);
+    if (isFinished) setFinishedRecipes(finishedRecipes.filter((finishedRecipe) => finishedRecipe.id !== id));
+    else setFinishedRecipes([...finishedRecipes, currentRecipe]);
   };
 
   return (

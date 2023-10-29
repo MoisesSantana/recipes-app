@@ -1,5 +1,6 @@
 'use client';
 
+import { useCurrentRecipe } from '@/zustand/current-recipe';
 import { useFavsStore } from '@/zustand/favorites';
 import { useModalStore } from '@/zustand/modal';
 import { Heart, MagnifyingGlass, ShareNetwork, UserCircle } from '@phosphor-icons/react';
@@ -23,16 +24,17 @@ export function Header() {
   const setFavsMeals = useFavsStore((state) => state.setMeals);
   const favsDrinks = useFavsStore((state) => state.drinks);
   const setFavsDrinks = useFavsStore((state) => state.setDrinks);
+  const currentRecipe = useCurrentRecipe((state) => state.currentRecipe);
 
   const favs = dataKey === 'meals' ? favsMeals : favsDrinks;
   const setFavs = dataKey === 'meals' ? setFavsMeals : setFavsDrinks;
 
 
-  const isFavorite = favs.some((fav) => fav === params.id);
+  const isFavorite = favs.some((fav) => fav.id === params.id);
 
   const handleFav = () => {
-    if (isFavorite) setFavs(favs.filter((fav) => fav !== params.id));
-    else setFavs([...favs, params.id as string]);
+    if (isFavorite) setFavs(favs.filter((fav) => fav.id !== params.id));
+    else setFavs([...favs, currentRecipe]);
   };
 
   const handleCopy = () => {

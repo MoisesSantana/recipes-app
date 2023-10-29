@@ -1,17 +1,62 @@
 'use client';
 
+import { useFavsStore } from '@/zustand/favorites';
+import { useFinishedStore } from '@/zustand/finished';
 import { useProfileStore } from '@/zustand/profile';
+import { User } from '@phosphor-icons/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Profile() {
   const userEmail = useProfileStore((state) => state.userEmail);
+  const setUserEmail = useProfileStore((state) => state.setUserEmail);
+  const setMealsFavs = useFavsStore((state) => state.setMeals);
+  const setDrinksFavs = useFavsStore((state) => state.setDrinks);
+  const setFinishedMeals = useFinishedStore((state) => state.setMeals);
+  const setFinishedDrinks = useFinishedStore((state) => state.setDrinks);
   const [localUserEmail, setLocalUserEmail] = useState('');
+  const router = useRouter();
 
   useEffect(() => {
     setLocalUserEmail(userEmail);
   }, [userEmail]);
 
+  const handleLogout = () => {
+    setUserEmail('');
+    setMealsFavs([]);
+    setDrinksFavs([]);
+    setFinishedMeals([]);
+    setFinishedDrinks([]);
+    router.push('/');
+  };
+
   return (
-    <div>{localUserEmail}</div>
+    <main className='h-[calc(100vh-80px)]'>
+      <div className='flex flex-col items-center py-10'>
+        <User size={42} fill='#e11d48' />
+        <h1 className='text-rose-600 font-bold'>{localUserEmail}</h1>
+      </div>
+
+      <div className='flex flex-col px-2 gap-4 lg:flex-row'>
+        <button
+          onClick={() => router.push('/recipes/completed-recipes')}
+          className='inline-flex lg:flex-1 justify-center rounded-md bg-rose-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500'
+        >
+          Completed Recipes
+        </button>
+        <button
+          onClick={() => router.push('/recipes/favorite-recipes')}
+          className='inline-flex lg:flex-1 justify-center rounded-md bg-rose-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500'
+        >
+          Favorite Recipes
+        </button>
+        <button
+          onClick={handleLogout}
+          className='inline-flex lg:flex-1 justify-center rounded-md bg-rose-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500'
+        >
+          Logout
+        </button>
+      </div>
+    </main>
   );
 }

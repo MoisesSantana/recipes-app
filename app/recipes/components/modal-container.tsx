@@ -8,7 +8,6 @@ type ModalContainerProps = {
   setOpenModal: () => void;
 }
 
-
 export function ModalContainer({ title, children, setOpenModal }:ModalContainerProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 

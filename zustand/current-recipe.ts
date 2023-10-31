@@ -13,4 +13,3 @@ export const useCurrentRecipe = create<CurrentRecipeState & CurrentRecipeAction>
   currentRecipe: { id: '', thumb: '', name: '' },
   setCurrentRecipe: (currentRecipe: CurrentRecipe) => set(() => ({ currentRecipe })),
 }));
-

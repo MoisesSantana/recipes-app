@@ -22,6 +22,10 @@ type RecipeData = {
   drinks: DrinkRecipe[],
 }
 
+type RecipeDetailsData = {
+  [key: string]: string,
+}
+
 export type Recipe = {
   id: string,
   name: string,
@@ -92,17 +96,54 @@ export async function handleFetchFilteredRecipes(pathname: string, searchType: S
   return recipes;
 }
 
-
-
-export function handleFetchRecipeDetails(pathname: string, id: string) {
-  const isMeal = pathname.includes('meal');
-
-  if (isMeal) return fetch(`${URL_BASIS_MEAL}lookup.php?i=${id}`).then(res => res.json());
-  return fetch(`${URL_BASIS_DRINK}lookup.php?i=${id}`).then(res => res.json());
+function formatJustARecipe(recipe: RecipeDetailsData, dataKey: string) {
+  return {
+    id: recipe[`id${dataKey}`],
+    name: recipe[`str${dataKey}`],
+    image: recipe[`str${dataKey}Thumb`],
+    category: recipe.strCategory,
+    instructions: recipe.strInstructions,
+  };
 }
 
+function formatIngredientAndMeasure(recipe: RecipeDetailsData) {
+  const listOfRecipeDetails = Object.entries(recipe);
+  const ingredientListUnformated = listOfRecipeDetails.filter(([key, value]) => key.includes('strIngredient') && value);
+  const measureListUnformated = listOfRecipeDetails.filter(([key, value]) => key.includes('strMeasure') && value);
 
+  const ingredientAndMeasures = ingredientListUnformated.map(([key, value]) => {
+    const index = key.split('strIngredient')[1];
+    const measure = measureListUnformated.find(([key]) => key.split('strMeasure')[1] === index) as [string, string];
+    return {
+      ingredient: value,
+      measure: measure[1],
+    };
+  });
 
+  return ingredientAndMeasures;
+}
+
+export async function handleFetchRecipeDetails(pathname: string, id: string) {
+  const isMeal = pathname.includes('meal');
+  const url = formatUrl(isMeal);
+  const response = await fetch(`${url}lookup.php?i=${id}`);
+  const data = await response.json();
+
+  const dataKeys = isMeal ? ({
+    dataKey: 'meals',
+    objectKey: 'Meal',
+  }) : ({
+    dataKey: 'drinks',
+    objectKey: 'Drink',
+  });
+  const [recipe] = data[dataKeys.dataKey];
+
+  const recipeWithoutIngredientList = formatJustARecipe(recipe, dataKeys.objectKey);
+  const ingredientAndMeasures = formatIngredientAndMeasure(recipe);
+
+  const recipeDetails = { ...recipeWithoutIngredientList, ingredientAndMeasures };
+  return recipeDetails;
+}
 
 export async function handleFetchAllCategories(isMeal: boolean) {
   const url = formatUrl(isMeal);

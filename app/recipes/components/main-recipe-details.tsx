@@ -8,11 +8,6 @@ import { useParams, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
-type IngredientAndMeasureType = {
-  ingredient: string;
-  measure: string;
-}[]
-
 export function MainRecipeDetails() {
   const { id } = useParams();
   const pathname = usePathname();
@@ -34,47 +29,24 @@ export function MainRecipeDetails() {
   );
 
   useEffect(() => {
-    if (!isLoading && !error && data) {
-      const [recipe] = data[dataKey];
-      const mealOrDrink = dataKey === 'meals' ? 'Meal' : 'Drink';
-  
-      const currentRecipe = {
-        id: recipe[`id${mealOrDrink}`],
-        name: recipe[`str${mealOrDrink}`],
-        thumb: recipe[`str${mealOrDrink}Thumb`],
-      };
-  
-      setCurrentRecipe(currentRecipe);
+    if (!isLoading && !error && data) {  
+      setCurrentRecipe({
+        id: data.id,
+        name: data.name,
+        thumb: data.image,
+      });
     }
   }, [isLoading]);
     
-  if (isLoading) return <Loading />;
+  if (isLoading || data === undefined) return <Loading />;
   if (error) return <Error message='Request Error' />;
-  const mealOrDrink = dataKey === 'meals' ? 'Meal' : 'Drink';
-  const [recipe] = data[dataKey];
-
-  const ingredients = Object.entries(recipe)
-    .filter(([key, value]) => key.includes('strIngredient') && value)
-    .map(([key, value]) => [key[key.length - 1], value] as [string, string]);
-    
-  const measures = Object.entries(recipe)
-    .filter(([key, value]) => key.includes('strMeasure') && value)
-    .map(([key, value]) => [key[key.length - 1], value] as [string, string]);
-
-  const ingredientsAndMeasures: IngredientAndMeasureType = ingredients.map(([key, value]) => {
-    const measure = measures.find(([measureKey]) => measureKey === key);
-    return {
-      ingredient: value,
-      measure: measure ? measure[1] : 'to taste',
-    };
-  });
 
   const isFinished = finishedRecipes.some((finishedRecipe) => finishedRecipe.id === id);
 
   const currentRecipe = {
-    id: recipe[`id${mealOrDrink}`],
-    name: recipe[`str${mealOrDrink}`],
-    thumb: recipe[`str${mealOrDrink}Thumb`],
+    id: data.id,
+    name: data.name,
+    thumb: data.image,
   };
 
   const handleFinished = () => {
@@ -85,8 +57,8 @@ export function MainRecipeDetails() {
   return (
     <main className='relative pb-12 flex flex-col md:flex-row md:items-center md:h-[calc(100vh-80px)]'>
       <Image
-        src={recipe[`str${mealOrDrink}Thumb`]}
-        alt={recipe[`str${mealOrDrink}`]}
+        src={data.image}
+        alt={data.name}
         width={400}
         height={400}
         priority
@@ -94,15 +66,15 @@ export function MainRecipeDetails() {
       />
       <div className='px-2 md:h-72 lg:h-80 flex flex-col md:gap-3 gap-8 justify-between'>
         <div className='border-b-2'>
-          <h2 className='text-neutral-600 text-lg font-bold'>{recipe[`str${mealOrDrink}`]}</h2>
-          <h3 className='text-neutral-600'>Category: {recipe.strCategory}</h3>
+          <h2 className='text-neutral-600 text-lg font-bold'>{data.name}</h2>
+          <h3 className='text-neutral-600'>Category: {data.category}</h3>
         </div>
       
         <div>
           <h3 className='text-neutral-600 text-lg font-bold'>Ingredients</h3>
           <ul className='overflow-y-auto md:h-20'>
             {
-              ingredientsAndMeasures.map(({ ingredient, measure }: { ingredient: string, measure: string }) => (
+              data.ingredientAndMeasures.map(({ ingredient, measure }: { ingredient: string, measure: string }) => (
                 <li className='text-neutral-600' key={`${ingredient}-${measure}`}>{ingredient} - {measure}</li>
               ))
             }
@@ -112,7 +84,7 @@ export function MainRecipeDetails() {
         <div>
           <h3 className='text-neutral-600 text-lg font-bold'>Instructions</h3>
           <div className='overflow-y-auto md:h-20'>
-            <p className='text-neutral-600'>{recipe.strInstructions}</p>
+            <p className='text-neutral-600'>{data.instructions}</p>
           </div>
         </div>
       </div>

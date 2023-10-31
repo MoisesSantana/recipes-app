@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { CurrentRecipe } from './types';
 
-
 type FinishedRecipesState = {
   meals: CurrentRecipe[];
   drinks: CurrentRecipe[];
@@ -27,4 +26,3 @@ export const useFinishedStore = create<FinishedRecipesState & FinishedRecipesAct
     }
   )
 );
-

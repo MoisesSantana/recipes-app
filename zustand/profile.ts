@@ -21,4 +21,3 @@ export const useProfileStore = create<ProfileState & ProfileAction>()(
     }
   )
 );
-

@@ -66,7 +66,6 @@ export function MainRecipesList() {
 
   handleOpenModal();
 
-
   const handleTitle = () => {
     if (currentModal === CurrentModal.SEARCH) return Titles.SEARCH;
     if (!isExplorePage) return Titles.CATEGORY;
@@ -93,5 +92,4 @@ export function MainRecipesList() {
       </main>
     </QueryClientProvider>
   );
-
 }

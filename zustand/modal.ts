@@ -21,4 +21,3 @@ export const useModalStore = create<ModalState & ModalAction>((set) => ({
   setOpenListModal: () => set((state) => ({ openListModal: !state.openListModal })),
   setSelectedModal: (selectedModal: ModalTypes) => set(() => ({ selectedModal })),
 }));
-

@@ -1,5 +1,6 @@
-type ButtonProps = {
-  onClick: () => void;
+import { ButtonHTMLAttributes } from 'react';
+
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &{
   children: React.ReactNode;
 }
 

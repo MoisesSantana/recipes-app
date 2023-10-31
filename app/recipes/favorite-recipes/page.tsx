@@ -14,7 +14,6 @@ export default function FavoriteRecipes() {
   
   const favsRecipes = [...favsMealsRecipes, ...favsDrinksRecipes];
 
-
   useEffect(() => {
     setIsClient(true);
   }, []);

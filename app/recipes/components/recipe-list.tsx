@@ -24,7 +24,6 @@ export function RecipeList({ category, search }: RecipeListProps) {
     }
   );
 
-
   if (isLoading) return <Loading />;
   if (error) return <Error message='Request Error' />;
   if (data === null) return <Error message='No results found' />;
@@ -32,7 +31,7 @@ export function RecipeList({ category, search }: RecipeListProps) {
   return (
     <div className='grid py-2 grid-cols-1 min-[450px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4'>
       {data && data.map((recipe: Recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
+        <RecipeCard key={recipe.id} url={`${pathname}/${recipe.id}`} recipe={recipe} />
       ))}
     </div>
   );

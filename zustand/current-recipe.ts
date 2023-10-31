@@ -10,6 +10,6 @@ type CurrentRecipeAction = {
 };
 
 export const useCurrentRecipe = create<CurrentRecipeState & CurrentRecipeAction>((set) => ({
-  currentRecipe: { id: '', thumb: '', name: '' },
+  currentRecipe: { id: '', image: '', name: '' },
   setCurrentRecipe: (currentRecipe: CurrentRecipe) => set(() => ({ currentRecipe })),
 }));

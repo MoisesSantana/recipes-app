@@ -30,11 +30,7 @@ export function MainRecipeDetails() {
 
   useEffect(() => {
     if (!isLoading && !error && data) {  
-      setCurrentRecipe({
-        id: data.id,
-        name: data.name,
-        thumb: data.image,
-      });
+      setCurrentRecipe(data);
     }
   }, [isLoading]);
     
@@ -43,15 +39,9 @@ export function MainRecipeDetails() {
 
   const isFinished = finishedRecipes.some((finishedRecipe) => finishedRecipe.id === id);
 
-  const currentRecipe = {
-    id: data.id,
-    name: data.name,
-    thumb: data.image,
-  };
-
   const handleFinished = () => {
     if (isFinished) setFinishedRecipes(finishedRecipes.filter((finishedRecipe) => finishedRecipe.id !== id));
-    else setFinishedRecipes([...finishedRecipes, currentRecipe]);
+    else setFinishedRecipes([...finishedRecipes, data]);
   };
 
   return (

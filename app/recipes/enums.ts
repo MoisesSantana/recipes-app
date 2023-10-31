@@ -4,3 +4,9 @@ export enum Titles {
   CATEGORY = 'Category',
   SEARCH = 'Search',
 }
+
+export enum Filters {
+  ALL = 'All',
+  MEALS = 'Meals',
+  DRINKS = 'Drinks',
+}

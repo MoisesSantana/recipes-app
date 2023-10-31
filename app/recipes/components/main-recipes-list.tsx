@@ -12,6 +12,7 @@ import { ModalList } from './modal-list';
 import { RecipeList } from './recipe-list';
 import { Search } from '../types';
 import { ModalTypes } from '@/zustand/enums';
+import { MainContainer } from './main-container';
 
 enum CurrentModal {
   LIST = 'list',
@@ -78,7 +79,7 @@ export function MainRecipesList() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <main className='h-[calc(100vh-80px)] mx-2'>
+      <MainContainer>
         <OpenModalBtn isExplorePage={isExplorePage} />
         {
           openModal && (
@@ -89,7 +90,7 @@ export function MainRecipesList() {
           )
         }
         { isExplorePage || <RecipeList search={search} category={category} />}
-      </main>
+      </MainContainer>
     </QueryClientProvider>
   );
 }

@@ -7,6 +7,7 @@ import { useProfileStore } from '@/zustand/profile';
 import { User } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { MainContainer } from '../recipes/components/main-container';
 
 export default function Profile() {
   const userEmail = useProfileStore((state) => state.userEmail);
@@ -32,13 +33,13 @@ export default function Profile() {
   };
 
   return (
-    <main className='h-[calc(100vh-80px)]'>
+    <MainContainer>
       <div className='flex flex-col items-center py-10'>
         <User size={42} fill='#e11d48' />
         <h1 className='text-rose-600 font-bold'>{localUserEmail}</h1>
       </div>
 
-      <div className='flex flex-col px-2 gap-4 lg:flex-row'>
+      <div className='flex flex-col gap-4 lg:flex-row'>
         <Button
           onClick={() => router.push('/recipes/completed-recipes')}
         >
@@ -55,6 +56,6 @@ export default function Profile() {
           Logout
         </Button>
       </div>
-    </main>
+    </MainContainer>
   );
 }

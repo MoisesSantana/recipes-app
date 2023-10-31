@@ -1,5 +1,5 @@
 export type CurrentRecipe = {
   id: string;
-  thumb: string;
+  image: string;
   name: string;
 }

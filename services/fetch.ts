@@ -113,7 +113,7 @@ function formatIngredientAndMeasure(recipe: RecipeDetailsData) {
 
   const ingredientAndMeasures = ingredientListUnformated.map(([key, value]) => {
     const index = key.split('strIngredient')[1];
-    const measure = measureListUnformated.find(([key]) => key.split('strMeasure')[1] === index) as [string, string];
+    const measure = measureListUnformated.find(([key]) => key.split('strMeasure')[1] === index) || [`strMeasure${index}`, 'to taste'] as [string, string];
     return {
       ingredient: value,
       measure: measure[1],
@@ -128,7 +128,6 @@ export async function handleFetchRecipeDetails(pathname: string, id: string) {
   const url = formatUrl(isMeal);
   const response = await fetch(`${url}lookup.php?i=${id}`);
   const data = await response.json();
-
   const dataKeys = isMeal ? ({
     dataKey: 'meals',
     objectKey: 'Meal',
@@ -137,7 +136,7 @@ export async function handleFetchRecipeDetails(pathname: string, id: string) {
     objectKey: 'Drink',
   });
   const [recipe] = data[dataKeys.dataKey];
-
+  
   const recipeWithoutIngredientList = formatJustARecipe(recipe, dataKeys.objectKey);
   const ingredientAndMeasures = formatIngredientAndMeasure(recipe);
 

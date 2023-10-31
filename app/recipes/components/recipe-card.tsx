@@ -1,16 +1,13 @@
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Recipe } from '@/services/fetch';
+import { CurrentRecipe } from '@/zustand/types';
 
 type RecipeProps = {
-  recipe: Recipe;
+  recipe: CurrentRecipe;
+  url: string;
 }
 
-export function RecipeCard({ recipe }: RecipeProps) {
-  const pathname = usePathname();
-  const url = `${pathname}/${recipe.id}`;
-
+export function RecipeCard({ recipe, url }: RecipeProps) {
   return (
     <Link href={url} className='rounded-md'>
       <Image

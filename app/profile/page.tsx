@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/button';
 import { useFavsStore } from '@/zustand/favorites';
 import { useFinishedStore } from '@/zustand/finished';
 import { useProfileStore } from '@/zustand/profile';
@@ -38,24 +39,21 @@ export default function Profile() {
       </div>
 
       <div className='flex flex-col px-2 gap-4 lg:flex-row'>
-        <button
+        <Button
           onClick={() => router.push('/recipes/completed-recipes')}
-          className='inline-flex lg:flex-1 justify-center rounded-md bg-rose-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500'
         >
           Completed Recipes
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => router.push('/recipes/favorite-recipes')}
-          className='inline-flex lg:flex-1 justify-center rounded-md bg-rose-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500'
         >
           Favorite Recipes
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={handleLogout}
-          className='inline-flex lg:flex-1 justify-center rounded-md bg-rose-600 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rose-500'
         >
           Logout
-        </button>
+        </Button>
       </div>
     </main>
   );

@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/button';
 import { useFavsStore } from '@/zustand/favorites';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -32,21 +33,18 @@ export default function FavoriteRecipes() {
   return (
     <main className='h-[calc(100vh-80px)]'>
       <section className='flex gap-4 pt-2 mx-2'>
-        <button
-          className='flex-1 bg-rose-600 py-1 text-white rounded-md'
+        <Button
           onClick={ () => setCategory('All') }>
           All
-        </button>
-        <button
-          className='flex-1 bg-rose-600 py-1 text-white rounded-md'
+        </Button>
+        <Button
           onClick={ () => setCategory('Meals') }>
           Meals
-        </button>
-        <button
-          className='flex-1 bg-rose-600 py-1 text-white rounded-md'
+        </Button>
+        <Button
           onClick={ () => setCategory('Drinks') }>
           Drinks
-        </button>
+        </Button>
       </section>
       <section className='grid p-2 grid-cols-1 min-[450px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4'>
         {isClient &&

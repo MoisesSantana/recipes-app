@@ -1,19 +1,24 @@
 import { create } from 'zustand';
+import { ModalTypes } from './enums';
 
 type ModalState = {
   openSearchModal: boolean;
-  openCategoryModal: boolean;
+  openListModal: boolean;
+  selectedModal: ModalTypes | '';
 };
 
 type ModalAction = {
   setOpenSearchModal: () => void;
-  setOpenCategoryModal: () => void;
+  setOpenListModal: () => void;
+  setSelectedModal: (selectedModal: ModalTypes) => void;
 };
 
 export const useModalStore = create<ModalState & ModalAction>((set) => ({
   openSearchModal: false,
-  openCategoryModal: false,
+  openListModal: false,
+  selectedModal: '',
   setOpenSearchModal: () => set((state) => ({ openSearchModal: !state.openSearchModal })),
-  setOpenCategoryModal: () => set((state) => ({ openCategoryModal: !state.openCategoryModal })),
+  setOpenListModal: () => set((state) => ({ openListModal: !state.openListModal })),
+  setSelectedModal: (selectedModal: ModalTypes) => set(() => ({ selectedModal })),
 }));
 

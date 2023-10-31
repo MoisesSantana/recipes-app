@@ -1,29 +1,39 @@
 'use client';
 
-import {
-  QueryClient,
-  QueryClientProvider,
-} from 'react-query';
-import { RecipeList } from './recipe-list';
-import { CategoryListModal } from './category-list-modal';
-import { useState } from 'react';
 import { useModalStore } from '@/zustand/modal';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { OpenModalBtn } from './open-modal-btn';
 import { SearchModal } from './search-modal';
 import { ModalContainer } from './modal-container';
+import { Titles } from '../enums';
+import { ModalList } from './modal-list';
+import { RecipeList } from './recipe-list';
 
 type Search = {
   search: string;
   searchType: string;
+};
+
+enum CurrentModal {
+  LIST = 'list',
+  SEARCH = 'search',
 }
 
 const queryClient = new QueryClient();
 
-export default function MainRecipesList() {
+export function MainRecipesList() {
+  const pathname = usePathname();
+  const isDrink = pathname.includes('drinks');
+  const isExplorePage = pathname.includes('explore');
+
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState({ search: '', searchType: '' });
+  
   const openSearchModal = useModalStore((state) => state.openSearchModal);
-  const openCategoryModal = useModalStore((state) => state.openCategoryModal);
-  const setOpenCategoryModal = useModalStore((state) => state.setOpenCategoryModal);
+  const openListModal = useModalStore((state) => state.openListModal);
+  const setOpenListModal = useModalStore((state) => state.setOpenListModal);
   const setOpenSearchModal = useModalStore((state) => state.setOpenSearchModal);
 
   const handleCategory = (category: string) => {
@@ -36,45 +46,48 @@ export default function MainRecipesList() {
     setCategory('All');
   };
 
-  let currentModal: 'category' | 'search' | null = null;
-  let currentSetModal: () => void = () => null;
+  let currentModal: CurrentModal | null = null;
+  let currentSetModal: () => void = () => {};
 
   const handleOpenModal = () => {
-    if (openCategoryModal) {
-      currentModal = 'category';
-      currentSetModal = setOpenCategoryModal;
+    if (openListModal) {
+      currentModal = CurrentModal.LIST;
+      currentSetModal = setOpenListModal;
     }
     if (openSearchModal) {
-      currentModal = 'search';
+      currentModal = CurrentModal.SEARCH;
       currentSetModal = setOpenSearchModal;
     }
   };
 
   handleOpenModal();
-  const openModal = openCategoryModal || openSearchModal;
+
+
+  const handleTitle = () => {
+    if (currentModal === CurrentModal.SEARCH) return Titles.SEARCH;
+    if (!isExplorePage) return Titles.CATEGORY;
+    return Titles.INGREDIENTS;
+  };
+
+  const title = handleTitle();
+
+  const openModal = openListModal || openSearchModal;
 
   return (
     <QueryClientProvider client={queryClient}>
-      <button
-        onClick={setOpenCategoryModal}
-        className="mx-2 mt-3 w-[calc(100%-16px)] py-2 rounded-md bg-white text-sm font-semibold text-neutral-600 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-      >
-        Categories
-      </button>
-      {
-        openModal && (
-          <ModalContainer title={currentModal} setOpenModal={currentSetModal}>
-            {currentModal === 'search' && <SearchModal handleSearch={handleSearch} />}
-            {currentModal === 'category' && (
-              <CategoryListModal
-                handleCategory={handleCategory}
-                selectedCategory={category}
-              />
-            )}
-          </ModalContainer>
-        )
-      }
-      <RecipeList search={search} category={category} />
+      <main className='h-[calc(100vh-80px)] mx-2'>
+        <OpenModalBtn isExplorePage={isExplorePage} />
+        {
+          openModal && (
+            <ModalContainer title={title} setOpenModal={currentSetModal}>
+              {currentModal === CurrentModal.SEARCH && <SearchModal handleSearch={handleSearch} />}
+              {currentModal === CurrentModal.LIST && <ModalList isDrink={isDrink} handleCategory={handleCategory} setOpenModal={currentSetModal} />}
+            </ModalContainer>
+          )
+        }
+        { isExplorePage || <RecipeList search={search} category={category} />}
+      </main>
     </QueryClientProvider>
   );
+
 }

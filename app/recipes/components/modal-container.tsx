@@ -1,11 +1,13 @@
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { useEffect, useRef } from 'react';
+import { Titles } from '../enums';
 
 type ModalContainerProps = {
-  title: 'search' | 'category' | null;
+  title: Titles;
   children: React.ReactNode;
   setOpenModal: () => void;
 }
+
 
 export function ModalContainer({ title, children, setOpenModal }:ModalContainerProps) {
   const modalRef = useRef<HTMLDivElement>(null);

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useProfileStore } from '@/zustand/profile';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/button';
 
 const signInFormSchema = z.object({
   email: z.string().email(),
@@ -50,13 +51,12 @@ export default function Home() {
             {...register('password')}
             className='mb-8 px-2 py-1 border border-neutral-300 rounded-md'
           />
-          <button
-            className='w-full bg-rose-600 border-neutral-300 rounded-md px py-1 text-white disabled:opacity-50 disabled:cursor-not-allowed'
+          <Button
             type="submit"
             disabled={isDisabled}
           >
             Entrar
-          </button>
+          </Button>
         </form>
       </section>
     </div>

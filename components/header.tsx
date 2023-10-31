@@ -1,6 +1,7 @@
 'use client';
 
 import { useCurrentRecipe } from '@/zustand/current-recipe';
+import { ModalTypes } from '@/zustand/enums';
 import { useFavsStore } from '@/zustand/favorites';
 import { useModalStore } from '@/zustand/modal';
 import { Heart, MagnifyingGlass, ShareNetwork, UserCircle } from '@phosphor-icons/react';
@@ -20,6 +21,7 @@ export function Header() {
   const haveFavAndShare = (pathname.includes('/recipes/meals') || pathname.includes('/recipes/drinks')) && pathname.split('/').length === 4;
 
   const setOpenSearchModal = useModalStore((state) => state.setOpenSearchModal);
+  const setSelectedModal = useModalStore((state) => state.setSelectedModal);
   const favsMeals = useFavsStore((state) => state.meals);
   const setFavsMeals = useFavsStore((state) => state.setMeals);
   const favsDrinks = useFavsStore((state) => state.drinks);
@@ -61,7 +63,12 @@ export function Header() {
       </Link>
       <h1 className='text-white text-2xl'>Recipes App</h1>
       { haveSearch && (
-        <button onClick={setOpenSearchModal}>
+        <button
+          onClick={ () => {
+            setSelectedModal(ModalTypes.SEARCH);
+            setOpenSearchModal();
+          }}
+        >
           <MagnifyingGlass size={32} fill='white' />
         </button> 
       )}

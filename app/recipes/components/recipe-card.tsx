@@ -1,28 +1,27 @@
 import Link from 'next/link';
-import { Recipe } from '../types';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { Recipe } from '@/services/fetch';
 
 type RecipeProps = {
   recipe: Recipe;
-  mealOrDrink: string;
 }
 
-export function RecipeCard({ recipe, mealOrDrink }: RecipeProps) {
+export function RecipeCard({ recipe }: RecipeProps) {
   const pathname = usePathname();
-  const url = `${pathname}/${recipe[`id${mealOrDrink}` as keyof Recipe]}`;
+  const url = `${pathname}/${recipe.id}`;
 
   return (
     <Link href={url} className='rounded-md'>
       <Image
-        src={recipe[`str${mealOrDrink}Thumb` as keyof Recipe]}
-        alt={recipe[`str${mealOrDrink}` as keyof Recipe]}
+        src={recipe.image}
+        alt={recipe.name}
         width={100}
         height={100}
         priority
         className='w-full rounded-md'
       />
-      <h2 className='text-neutral-600'>{recipe[`str${mealOrDrink}` as keyof Recipe]}</h2>
+      <h2 className='text-neutral-600'>{recipe.name}</h2>
     </Link>
   );
 }

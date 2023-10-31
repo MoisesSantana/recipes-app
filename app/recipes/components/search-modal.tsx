@@ -3,19 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 import * as z from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-type SearchType = {
-  search: string;
-  searchType: string;
-}
+import { Search, SearchType } from '../types';
 
 type SearchModalProps = {
-  handleSearch: (search: SearchType) => void;
+  handleSearch: (search: Search) => void;
 }
 
 const searchFormSchema = z.object({
   search: z.string().min(1),
-  searchType: z.string(),
+  searchType: z.string().refine((value) => Object.values(SearchType).includes(value as SearchType)),
 });
 
 type SearchFormSchemaType = z.infer<typeof searchFormSchema>;
@@ -56,7 +52,7 @@ export function SearchModal({ handleSearch }: SearchModalProps) {
   
   const handleSubmitSearch = (data: SearchFormSchemaType) => {
     data.search = searchValue;
-    handleSearch(data);
+    handleSearch(data as Search);
     setOpenSearchModal();
   };
 
@@ -86,48 +82,48 @@ export function SearchModal({ handleSearch }: SearchModalProps) {
                 <input
                   type="radio"
                   className='mr-1'
-                  id='ingredient'
-                  value='ingredient'
-                  onChange={(e) => field.onChange(e.target.value)}
-                  checked={field.value === 'ingredient'}
+                  id={ SearchType.INGREDIENT }
+                  value={ SearchType.INGREDIENT }
+                  onChange={ (e) => field.onChange(e.target.value) }
+                  checked={ field.value === SearchType.INGREDIENT }
                 />
                 <label
                   className='text-sm text-neutral-600'
-                  htmlFor="ingredient"
+                  htmlFor={ SearchType.INGREDIENT }
                 >
-                  ingredient
+                  { SearchType.INGREDIENT }
                 </label>
               </div>
               <div className='flex items-center'>
                 <input
                   type="radio"
                   className='mr-1'
-                  id='name'
-                  value='name'
-                  onChange={(e) => field.onChange(e.target.value)}
-                  checked={field.value === 'name'}
+                  id={ SearchType.NAME}
+                  value={ SearchType.NAME}
+                  onChange={ (e) => field.onChange(e.target.value) }
+                  checked={ field.value === SearchType.NAME }
                 />
                 <label
                   className='text-sm text-neutral-600'
-                  htmlFor="name"
+                  htmlFor={ SearchType.NAME }
                 >
-                  name
+                  { SearchType.NAME }
                 </label>
               </div>
               <div className='flex items-center'>
                 <input
                   type="radio"
                   className='mr-1'
-                  id='firs-letter'
-                  value='first-letter'
-                  onChange={(e) => field.onChange(e.target.value)}
-                  checked={field.value === 'first-letter'}
+                  id={ SearchType.FIRST_LETTER }
+                  value={ SearchType.FIRST_LETTER}
+                  onChange={ (e) => field.onChange(e.target.value) }
+                  checked={ field.value === SearchType.FIRST_LETTER }
                 />
                 <label
                   className='text-sm text-neutral-600'
-                  htmlFor="firs-letter"
+                  htmlFor={ SearchType.FIRST_LETTER }
                 >
-                  first letter
+                  { SearchType.FIRST_LETTER }
                 </label>
               </div>
             </>

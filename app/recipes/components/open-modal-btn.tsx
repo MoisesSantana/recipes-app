@@ -22,7 +22,7 @@ export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
       <div className='flex h-full flex-col gap-4 md:flex-row items-start'>
         <Button
           onClick={ () => {
-            setSelectedModal(ModalTypes.INGREDIENT);
+            setSelectedModal(ModalTypes.MEALS_INGREDIENT);
             setOpenListModal();
           }}
         >
@@ -30,7 +30,7 @@ export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
         </Button>
         <Button
           onClick={ () => {
-            setSelectedModal(ModalTypes.INGREDIENT);
+            setSelectedModal(ModalTypes.DRINKS_INGREDIENT);
             setOpenListModal();
           }}
         >

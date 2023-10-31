@@ -1,13 +1,10 @@
-type MealRecipe = {
-  idMeal: string;
-  strMeal: string;
-  strMealThumb: string;
-};
+export enum SearchType {
+  NAME = 'name',
+  FIRST_LETTER = 'first-letter',
+  INGREDIENT = 'ingredient',
+}
 
-type DrinkRecipe = {
-  idDrink: string;
-  strDrink: string;
-  strDrinkThumb: string;
-};
-
-export type Recipe = MealRecipe & DrinkRecipe;
+export type Search = {
+  search: string;
+  searchType: SearchType | '';
+}

@@ -1,57 +1,98 @@
+import { SearchType } from '@/app/recipes/types';
+
 const URL_BASIS_MEAL = 'https://www.themealdb.com/api/json/v1/1/';
 const URL_BASIS_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/';
 
-export function handleFetchAllRecipes(pathname: string) {
-  const isMeal = pathname.includes('meal');
+type MealRecipe = {
+  idMeal: string,
+  strMeal: string,
+  strMealThumb: string,
+  strCategory: string,
+};
 
-  if (isMeal) return fetch(`${URL_BASIS_MEAL}search.php?s=`).then(res => res.json());
-  return fetch(`${URL_BASIS_DRINK}search.php?s=`).then(res => res.json());
+type DrinkRecipe = {
+  idDrink: string,
+  strDrink: string,
+  strDrinkThumb: string,
+  strCategory: string,
+};
+
+type RecipeData = {
+  meals: MealRecipe[],
+  drinks: DrinkRecipe[],
 }
 
-export async function handleFetchAllCategories(isDrink: boolean) {
-  if (isDrink) {
-    const response = await fetch(`${URL_BASIS_DRINK}list.php?c=list`);
-    const data = await response.json();
-    const categories = data.drinks.map((category: { strCategory: string }) => category.strCategory);
-    return ['All', ...categories];
-  }
-
-  const response = await fetch(`${URL_BASIS_MEAL}list.php?c=list`);
-  const data = await response.json();
-  const categories = data.meals.map((category: { strCategory: string }) => category.strCategory);
-  return ['All', ...categories];
+export type Recipe = {
+  id: string,
+  name: string,
+  image: string,
+  category: string,
 }
 
-export function handleFetchRecipesByCategory(pathname: string, category: string) {
-  const isMeal = pathname.includes('meal');
+const formatUrl = (isMeal: boolean) => isMeal ? URL_BASIS_MEAL : URL_BASIS_DRINK;
 
-  if (isMeal) return fetch(`${URL_BASIS_MEAL}filter.php?c=${category}`).then(res => res.json());
-  return fetch(`${URL_BASIS_DRINK}filter.php?c=${category}`).then(res => res.json());
-}
-
-export function handleFetchFilteredRecipes(pathname: string, searchType: string, searchValue: string) {
-  const isMeal = pathname.includes('meal');
-
+function formatRecipes(isMeal: boolean, data: RecipeData) {
   if (isMeal) {
-    switch (searchType) {
-    case 'ingredient':
-      return fetch(`${URL_BASIS_MEAL}filter.php?i=${searchValue}`).then(res => res.json());
-    case 'name':
-      return fetch(`${URL_BASIS_MEAL}search.php?s=${searchValue}`).then(res => res.json());
-    default:
-      return fetch(`${URL_BASIS_MEAL}search.php?f=${searchValue}`).then(res => res.json());
-    }
+    return data.meals.map((meal: MealRecipe) => ({
+      id: meal.idMeal,
+      name: meal.strMeal,
+      image: meal.strMealThumb,
+      category: meal.strCategory,
+    }));
   }
-  
-  switch (searchType) {
-  case 'ingredient':
-    return fetch(`${URL_BASIS_DRINK}filter.php?i=${searchValue}`).then(res => res.json());
-  case 'name':
-    return fetch(`${URL_BASIS_DRINK}search.php?s=${searchValue}`).then(res => res.json());
-  default:
-    return fetch(`${URL_BASIS_DRINK}search.php?f=${searchValue}`).then(res => res.json());
-  }
+
+  return data.drinks.map((drink: DrinkRecipe) => ({
+    id: drink.idDrink,
+    name: drink.strDrink,
+    image: drink.strDrinkThumb,
+    category: drink.strCategory,
+  }));
 }
+
+export async function handleFetchAllRecipes(pathname: string) {
+  const isMeal = pathname.includes('meal');
+  const url = formatUrl(isMeal);
+  const response = await fetch(`${url}search.php?s=`);
+  const data = await response.json();
+  const recipes = formatRecipes(isMeal, data);
+
+  return recipes;
+}
+
+export async function handleFetchRecipesByCategory(pathname: string, category: string) {
+  const isMeal = pathname.includes('meal');
+  const url = formatUrl(isMeal);
+  const response = await fetch(`${url}filter.php?c=${category}`);
+  const data = await response.json();
+  const recipes = formatRecipes(isMeal, data);
+
+  return recipes;
+}
+
+const formatUrlWithSearch = (url: string, searchType: SearchType | '', searchValue: string) => {
+  switch (searchType) {
+  case SearchType.INGREDIENT:
+    return `${url}filter.php?i=${searchValue}`;
+  case SearchType.NAME:
+    return `${url}search.php?s=${searchValue}`;
+  default:
+    return `${url}search.php?f=${searchValue}`;
+  }
+};
+
+export async function handleFetchFilteredRecipes(pathname: string, searchType: SearchType | '', searchValue: string) {
+  const isMeal = pathname.includes('meal');
+  let url = formatUrl(isMeal);
+  url = formatUrlWithSearch(url, searchType, searchValue);
+  const response = await fetch(url);
+  const data = await response.json();
+  if (data.meals === null || data.drinks === null) return null;
+  const recipes = formatRecipes(isMeal, data);
+
+  return recipes;
+}
+
+
 
 export function handleFetchRecipeDetails(pathname: string, id: string) {
   const isMeal = pathname.includes('meal');
@@ -60,17 +101,32 @@ export function handleFetchRecipeDetails(pathname: string, id: string) {
   return fetch(`${URL_BASIS_DRINK}lookup.php?i=${id}`).then(res => res.json());
 }
 
-export async function handleFetchIngredients(isDrink: boolean) {
-  if (isDrink) {
-    const response = await fetch(`${URL_BASIS_DRINK}list.php?i=list`);
-    const data = await response.json();
-    const ingredients = data.drinks.map((ingredient: { strIngredient1: string }) => ingredient.strIngredient1);
-    return ingredients;
-  }
 
-  const response = await fetch(`${URL_BASIS_MEAL}list.php?i=list`);
+
+
+export async function handleFetchAllCategories(isMeal: boolean) {
+  const url = formatUrl(isMeal);
+  const response = await fetch(`${url}list.php?c=list`);
   const data = await response.json();
-  const ingredients = data.meals.map((ingredient: { strIngredient: string }) => ingredient.strIngredient);
+  const dataKey = isMeal ? 'meals' : 'drinks';
+  const categories = data[dataKey].map((category: { strCategory: string }) => category.strCategory);
+  
+  return ['All', ...categories];
+}
+
+export async function handleFetchIngredients(isMeal: boolean) {
+  const url = formatUrl(isMeal);
+  const response = await fetch(`${url}list.php?i=list`);
+  const data = await response.json();
+  const dataKeys = isMeal ? ({
+    dataKey: 'meals',
+    objectKey: 'strIngredient',
+  }) : ({
+    dataKey: 'drinks',
+    objectKey: 'strIngredient1',
+  });
+  const ingredients = data[dataKeys.dataKey].map((ingredient: { [key: string]: string }) => ingredient[dataKeys.objectKey]);
+
   return ingredients;
 }
 

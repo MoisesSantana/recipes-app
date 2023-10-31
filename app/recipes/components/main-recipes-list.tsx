@@ -89,7 +89,7 @@ export function MainRecipesList() {
             </ModalContainer>
           )
         }
-        { isExplorePage || <RecipeList search={search} category={category} />}
+        <RecipeList search={search} category={category} isExplore={isExplorePage} />
       </MainContainer>
     </QueryClientProvider>
   );

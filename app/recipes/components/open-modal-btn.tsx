@@ -19,7 +19,7 @@ export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
 
   if (isExplorePage) {
     return (
-      <div className='flex h-full flex-col gap-4 md:flex-row items-start'>
+      <div className='flex flex-col gap-1 md:gap-4 md:flex-row items-start'>
         <Button
           onClick={ () => {
             setSelectedModal(ModalTypes.MEALS_INGREDIENT);

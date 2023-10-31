@@ -176,3 +176,21 @@ export async function handleFetchAreas() {
   const areas = data.meals.map((area: { strArea: string }) => area.strArea);
   return areas;
 }
+
+export async function handleFetchRecipeByIngredient(isMeal: boolean, ingredient: string) {
+  const url = formatUrl(isMeal);
+  const response = await fetch(`${url}filter.php?i=${ingredient}`);
+  const data = await response.json();
+  const recipes = formatRecipes(isMeal, data);
+  
+  return recipes;
+}
+
+export async function handleFetchRecipesByArea(area: string) {
+  const response = await fetch(`${URL_BASIS_MEAL}filter.php?a=${area}`);
+  const data = await response.json();
+  const recipes = formatRecipes(true, data);
+  
+  return recipes;
+  
+}

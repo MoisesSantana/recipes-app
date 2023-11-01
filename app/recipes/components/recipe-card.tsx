@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { CurrentRecipe } from '@/zustand/types';
+import { CurrentRecipe } from '@/types/recipe-types';
 
 type RecipeProps = {
   recipe: CurrentRecipe;

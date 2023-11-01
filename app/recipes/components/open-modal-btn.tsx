@@ -1,23 +1,14 @@
 import { Button } from '@/components/button';
-import { ModalTypes } from '@/zustand/enums';
-import { useModalStore } from '@/zustand/modal';
+import { Buttons, ModalTypes } from '@/types/modal-types';
+import { useModalStore } from '@/store/modal';
+import { usePathname } from 'next/navigation';
 
-type OpenModalBtnProps = {
-  isExplorePage: boolean;
-}
-
-enum Titles {
-  MEALS_INGREDIENT = 'Meals Ingredients',
-  DRINKS_INGREDIENT = 'Drinks Ingredients',
-  MEALS_AREA = 'Meals Area',
-  CATEGORY = 'Categories',
-}
-
-export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
+export function OpenModalBtn() {
+  const pathname = usePathname();
   const setOpenListModal = useModalStore((state) => state.setOpenListModal);
   const setSelectedModal = useModalStore((state) => state.setSelectedModal);
 
-  if (isExplorePage) {
+  if (pathname.includes('explore')) {
     return (
       <div className='flex flex-col gap-1 md:gap-4 md:flex-row items-start'>
         <Button
@@ -26,7 +17,7 @@ export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
             setOpenListModal();
           }}
         >
-          { Titles.MEALS_INGREDIENT }
+          { Buttons.MEALS_INGREDIENT }
         </Button>
         <Button
           onClick={ () => {
@@ -34,7 +25,7 @@ export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
             setOpenListModal();
           }}
         >
-          { Titles.DRINKS_INGREDIENT }
+          { Buttons.DRINKS_INGREDIENT }
         </Button>
         <Button
           onClick={ () => {
@@ -42,7 +33,7 @@ export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
             setOpenListModal();
           }}
         >
-          { Titles.MEALS_AREA }
+          { Buttons.MEALS_AREA }
         </Button>
       </div>
     );
@@ -55,7 +46,7 @@ export function OpenModalBtn({ isExplorePage }: OpenModalBtnProps) {
         setOpenListModal();
       }}
     >
-      { Titles.CATEGORY }
+      { Buttons.CATEGORY }
     </Button>
   );
 }

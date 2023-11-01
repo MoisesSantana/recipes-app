@@ -1,19 +1,19 @@
 'use client';
 
-import { useFinishedStore } from '@/zustand/finished';
+import { useFinishedStore } from '@/store/finished';
 import { useEffect, useState } from 'react';
-import { Filters } from '../enums';
 import { FiltersButtons } from './filter-buttons';
 import { RecipeCard } from './recipe-card';
-import { useFavsStore } from '@/zustand/favorites';
+import { useFavsStore } from '@/store/favorites';
 import { usePathname } from 'next/navigation';
 import { MainContainer } from './main-container';
+import { ProfileFilters } from '@/types/filters';
 
 export function MainProfileRecipes() {
   const pathname = usePathname();
   const isFavorite = pathname.includes('favorite');
 
-  const [category, setCategory] = useState<Filters>(Filters.ALL);
+  const [category, setCategory] = useState<ProfileFilters>(ProfileFilters.ALL);
   const [isClient, setIsClient] = useState(false);
   const finishedMealsRecipes = useFinishedStore((state) => state.meals);
   const finishedDrinksRecipes = useFinishedStore((state) => state.drinks);
@@ -27,15 +27,15 @@ export function MainProfileRecipes() {
     setIsClient(true);
   }, []);
 
-  function handleCategory(category: Filters) {
+  function handleCategory(category: ProfileFilters) {
     setCategory(category);
   }
 
   function switchRecipeList() {
     switch (category) {
-    case Filters.ALL:
+    case ProfileFilters.ALL:
       return isFavorite ? favsRecipes : finishedRecipes;
-    case Filters.MEALS:
+    case ProfileFilters.MEALS:
       return isFavorite ? favsMealsRecipes : finishedMealsRecipes;
     default:
       return isFavorite ? favsDrinksRecipes : finishedDrinksRecipes;

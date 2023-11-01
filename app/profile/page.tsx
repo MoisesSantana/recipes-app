@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/button';
-import { useFavsStore } from '@/zustand/favorites';
-import { useFinishedStore } from '@/zustand/finished';
-import { useProfileStore } from '@/zustand/profile';
+import { useFavsStore } from '@/store/favorites';
+import { useFinishedStore } from '@/store/finished';
+import { useProfileStore } from '@/store/profile';
 import { User } from '@phosphor-icons/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,8 @@ export default function Profile() {
   const setFinishedDrinks = useFinishedStore((state) => state.setDrinks);
   const [localUserEmail, setLocalUserEmail] = useState('');
   const router = useRouter();
+
+  if (!userEmail) router.push('/');
 
   useEffect(() => {
     setLocalUserEmail(userEmail);
@@ -34,12 +36,12 @@ export default function Profile() {
 
   return (
     <MainContainer>
-      <div className='flex flex-col items-center py-10'>
+      <section className='flex flex-col items-center py-10'>
         <User size={42} fill='#e11d48' />
         <h1 className='text-rose-600 font-bold'>{localUserEmail}</h1>
-      </div>
+      </section>
 
-      <div className='flex flex-col gap-4 lg:flex-row'>
+      <section className='flex flex-col gap-4 lg:flex-row'>
         <Button
           onClick={() => router.push('/recipes/completed-recipes')}
         >
@@ -55,7 +57,7 @@ export default function Profile() {
         >
           Logout
         </Button>
-      </div>
+      </section>
     </MainContainer>
   );
 }

@@ -1,18 +1,18 @@
+import { CurrentRecipe } from '@/types/recipe-types';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { CurrentRecipe } from './types';
 
-type FinishedRecipesState = {
+type FavsState = {
   meals: CurrentRecipe[];
   drinks: CurrentRecipe[];
 };
 
-type FinishedRecipesAction = {
+type FavsAction = {
   setMeals: (meals: CurrentRecipe[]) => void;
   setDrinks: (drinks: CurrentRecipe[]) => void;
 }
 
-export const useFinishedStore = create<FinishedRecipesState & FinishedRecipesAction>()(
+export const useFavsStore = create<FavsState & FavsAction>()(
   persist(
     (set) => ({
       meals: [],
@@ -21,7 +21,7 @@ export const useFinishedStore = create<FinishedRecipesState & FinishedRecipesAct
       setDrinks: (drinks: CurrentRecipe[]) => set(() => ({ drinks })),
     }),
     {
-      name: 'finished-recipes-storage',
+      name: 'favs-storage',
       storage: createJSONStorage(() => localStorage),
     }
   )

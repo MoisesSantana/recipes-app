@@ -1,27 +1,27 @@
 import { Button } from '@/components/button';
-import { Filters } from '../enums';
+import { ProfileFilters } from '@/types/filters';
 
 type FiltersButtonsProps = {
-  setCategory: (category: Filters) => void;
+  setCategory: (category: ProfileFilters) => void;
 }
 
 export function FiltersButtons({ setCategory }: FiltersButtonsProps) {
   return (
     <section className='flex gap-4 pt-2'>
       <Button
-        onClick={ () => setCategory(Filters.ALL) }
+        onClick={ () => setCategory(ProfileFilters.ALL) }
       >
-        { Filters.ALL }
+        { ProfileFilters.ALL }
       </Button>
       <Button
-        onClick={ () => setCategory(Filters.MEALS) }
+        onClick={ () => setCategory(ProfileFilters.MEALS) }
       >
-        { Filters.MEALS }
+        { ProfileFilters.MEALS }
       </Button>
       <Button
-        onClick={ () => setCategory(Filters.DRINKS) }
+        onClick={ () => setCategory(ProfileFilters.DRINKS) }
       >
-        { Filters.DRINKS }
+        { ProfileFilters.DRINKS }
       </Button>
     </section>
   );

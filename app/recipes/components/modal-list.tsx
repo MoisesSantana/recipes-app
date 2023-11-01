@@ -1,24 +1,32 @@
 import { Error } from '@/components/error';
 import { Loading } from '@/components/loading';
 import { handleFetchAllCategories, handleFetchAreas, handleFetchIngredients } from '@/services/fetch';
-import { ModalTypes } from '@/zustand/enums';
-import { useModalStore } from '@/zustand/modal';
+import { ModalTypes } from '@/types/modal-types';
+import { useModalStore } from '@/store/modal';
+import { usePathname } from 'next/navigation';
 import { useQuery } from 'react-query';
 
 type ModalListProps = {
-  isMeal?: boolean;
   handleCategory?: (category: string) => void;
-  setOpenModal: () => void;
 }
 
-export function ModalList({ isMeal = false, handleCategory, setOpenModal }: ModalListProps) {  
+export function ModalList({ handleCategory }: ModalListProps) {  
+  const pathname = usePathname();
+  const setListModal = useModalStore((state) => state.setOpenListModal);
   const selectedModal = useModalStore((state) => state.selectedModal);
   const dataKey = selectedModal === ModalTypes.MEALS_INGREDIENT ? 'meals' : 'drinks';
+
+  const isMeal = () => {
+    const pathHasMeals = pathname.includes('meals');
+    const selectedModalIsMeals = selectedModal === ModalTypes.MEALS_INGREDIENT;
+
+    return pathHasMeals || selectedModalIsMeals && pathname.includes('explore');
+  };
 
   const { isLoading, error, data } = useQuery(
     ['fetchLists', dataKey, selectedModal],
     () => {
-      if (selectedModal === ModalTypes.CATEGORY) return handleFetchAllCategories(isMeal);
+      if (selectedModal === ModalTypes.CATEGORY) return handleFetchAllCategories(isMeal());
       if (selectedModal === ModalTypes.MEALS_INGREDIENT || selectedModal === ModalTypes.DRINKS_INGREDIENT) return handleFetchIngredients(dataKey === 'meals');
       return handleFetchAreas();
     }
@@ -35,7 +43,7 @@ export function ModalList({ isMeal = false, handleCategory, setOpenModal }: Moda
             className='w-full h-full'
             onClick={ () => {
               if (handleCategory) handleCategory(cur);
-              setOpenModal();
+              setListModal();
             } }
           >
             {cur}

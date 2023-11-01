@@ -1,55 +1,25 @@
-import { SearchType } from '@/app/recipes/types';
+import { DinamicData, DinamicDataValues } from '@/types/recipe-types';
+import { SearchType } from '@/types/search';
 
 const URL_BASIS_MEAL = 'https://www.themealdb.com/api/json/v1/1/';
 const URL_BASIS_DRINK = 'https://www.thecocktaildb.com/api/json/v1/1/';
 
-type MealRecipe = {
-  idMeal: string,
-  strMeal: string,
-  strMealThumb: string,
-  strCategory: string,
-};
-
-type DrinkRecipe = {
-  idDrink: string,
-  strDrink: string,
-  strDrinkThumb: string,
-  strCategory: string,
-};
-
-type RecipeData = {
-  meals: MealRecipe[],
-  drinks: DrinkRecipe[],
-}
-
-type RecipeDetailsData = {
-  [key: string]: string,
-}
-
-export type Recipe = {
-  id: string,
-  name: string,
-  image: string,
-  category: string,
-}
-
 const formatUrl = (isMeal: boolean) => isMeal ? URL_BASIS_MEAL : URL_BASIS_DRINK;
 
-function formatRecipes(isMeal: boolean, data: RecipeData) {
-  if (isMeal) {
-    return data.meals.map((meal: MealRecipe) => ({
-      id: meal.idMeal,
-      name: meal.strMeal,
-      image: meal.strMealThumb,
-      category: meal.strCategory,
-    }));
-  }
+function formatRecipes(isMeal: boolean, data: DinamicData) {
+  const dataKeys = isMeal ? ({
+    dataKey: 'meals',
+    objectKey: 'Meal',
+  }) : ({
+    dataKey: 'drinks',
+    objectKey: 'Drink',
+  });
 
-  return data.drinks.map((drink: DrinkRecipe) => ({
-    id: drink.idDrink,
-    name: drink.strDrink,
-    image: drink.strDrinkThumb,
-    category: drink.strCategory,
+  return data[dataKeys.dataKey].map((recipe: DinamicDataValues) => ({
+    id: recipe[`id${dataKeys.objectKey}`],
+    name: recipe[`str${dataKeys.objectKey}`],
+    image: recipe[`str${dataKeys.objectKey}Thumb`],
+    category: recipe.strCategory,
   }));
 }
 
@@ -96,7 +66,7 @@ export async function handleFetchFilteredRecipes(pathname: string, searchType: S
   return recipes;
 }
 
-function formatJustARecipe(recipe: RecipeDetailsData, dataKey: string) {
+function formatJustARecipe(recipe: DinamicDataValues, dataKey: string) {
   return {
     id: recipe[`id${dataKey}`],
     name: recipe[`str${dataKey}`],
@@ -106,7 +76,7 @@ function formatJustARecipe(recipe: RecipeDetailsData, dataKey: string) {
   };
 }
 
-function formatIngredientAndMeasure(recipe: RecipeDetailsData) {
+function formatIngredientAndMeasure(recipe: DinamicDataValues) {
   const listOfRecipeDetails = Object.entries(recipe);
   const ingredientListUnformated = listOfRecipeDetails.filter(([key, value]) => key.includes('strIngredient') && value);
   const measureListUnformated = listOfRecipeDetails.filter(([key, value]) => key.includes('strMeasure') && value);

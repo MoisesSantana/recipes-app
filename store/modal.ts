@@ -1,10 +1,12 @@
+import { ModalTypes } from '@/types/modal-types';
 import { create } from 'zustand';
-import { ModalTypes } from './enums';
+
+/* ModalTypes | '' */
 
 type ModalState = {
   openSearchModal: boolean;
   openListModal: boolean;
-  selectedModal: ModalTypes | '';
+  selectedModal: ModalTypes;
 };
 
 type ModalAction = {
@@ -16,7 +18,7 @@ type ModalAction = {
 export const useModalStore = create<ModalState & ModalAction>((set) => ({
   openSearchModal: false,
   openListModal: false,
-  selectedModal: '',
+  selectedModal: ModalTypes.CATEGORY,
   setOpenSearchModal: () => set((state) => ({ openSearchModal: !state.openSearchModal })),
   setOpenListModal: () => set((state) => ({ openListModal: !state.openListModal })),
   setSelectedModal: (selectedModal: ModalTypes) => set(() => ({ selectedModal })),

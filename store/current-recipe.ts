@@ -1,5 +1,5 @@
+import { CurrentRecipe } from '@/types/recipe-types';
 import { create } from 'zustand';
-import { CurrentRecipe } from './types';
 
 type CurrentRecipeState = {
   currentRecipe: CurrentRecipe;

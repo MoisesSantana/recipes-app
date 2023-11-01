@@ -1,9 +1,12 @@
-import { useModalStore } from '@/zustand/modal';
-import { useEffect, useRef, useState } from 'react';
+import { useModalStore } from '@/store/modal';
+import { useEffect, useState } from 'react';
 import * as z from 'zod';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Search, SearchType } from '../types';
+import { Search, SearchType } from '@/types/search';
+import { InputText } from '@/components/input-text';
+import { SearchInputs } from '@/types/forms';
+import { InputRadio } from '@/components/input-radio';
 
 type SearchModalProps = {
   handleSearch: (search: Search) => void;
@@ -27,14 +30,7 @@ export function SearchModal({ handleSearch }: SearchModalProps) {
 
   const isDisabled = !formState.isValid;
 
-  const modalRef = useRef<HTMLDivElement>(null);
   const setOpenSearchModal = useModalStore((state) => state.setOpenSearchModal);
-  
-  useEffect(() => {
-    if (modalRef.current) {
-      modalRef.current.focus();
-    }
-  }, []);
 
   useEffect(() => {
     if (search?.length > 1 && searchType === 'first-letter') {
@@ -58,19 +54,12 @@ export function SearchModal({ handleSearch }: SearchModalProps) {
 
   return (
     <form onSubmit={handleSubmit(handleSubmitSearch)} className="bg-gray-50 flex-col px-4 py-3 flex sm:px-6 max-h-80 overflow-y-auto">
-      <label
-        className='text-sm text-neutral-600 mb-1'
-        htmlFor="search-input"
-      >
-        Enter your search
-      </label>
-      <input
-        className='mb-4 px-2 py-1 border border-neutral-300 rounded-md'
-        type="text"
-        id="search-input"
-        {...register('search')}
+      <InputText
+        name={ SearchInputs.SEARCH }
+        register={register}
+        text='Enter your search'
         value={searchValue}
-        onChange={(e) => handleSearchInputChange(e.target.value)}
+        handleChange={handleSearchInputChange}
       />
       <fieldset className='flex justify-between'>
         <Controller
@@ -78,54 +67,9 @@ export function SearchModal({ handleSearch }: SearchModalProps) {
           name='searchType'
           render={({ field }) => (
             <>
-              <div className='flex items-center'>
-                <input
-                  type="radio"
-                  className='mr-1'
-                  id={ SearchType.INGREDIENT }
-                  value={ SearchType.INGREDIENT }
-                  onChange={ (e) => field.onChange(e.target.value) }
-                  checked={ field.value === SearchType.INGREDIENT }
-                />
-                <label
-                  className='text-sm text-neutral-600'
-                  htmlFor={ SearchType.INGREDIENT }
-                >
-                  { SearchType.INGREDIENT }
-                </label>
-              </div>
-              <div className='flex items-center'>
-                <input
-                  type="radio"
-                  className='mr-1'
-                  id={ SearchType.NAME}
-                  value={ SearchType.NAME}
-                  onChange={ (e) => field.onChange(e.target.value) }
-                  checked={ field.value === SearchType.NAME }
-                />
-                <label
-                  className='text-sm text-neutral-600'
-                  htmlFor={ SearchType.NAME }
-                >
-                  { SearchType.NAME }
-                </label>
-              </div>
-              <div className='flex items-center'>
-                <input
-                  type="radio"
-                  className='mr-1'
-                  id={ SearchType.FIRST_LETTER }
-                  value={ SearchType.FIRST_LETTER}
-                  onChange={ (e) => field.onChange(e.target.value) }
-                  checked={ field.value === SearchType.FIRST_LETTER }
-                />
-                <label
-                  className='text-sm text-neutral-600'
-                  htmlFor={ SearchType.FIRST_LETTER }
-                >
-                  { SearchType.FIRST_LETTER }
-                </label>
-              </div>
+              <InputRadio field={field} value={ SearchType.INGREDIENT } />
+              <InputRadio field={field} value={ SearchType.NAME } />
+              <InputRadio field={field} value={ SearchType.FIRST_LETTER } />
             </>
           )}
         />

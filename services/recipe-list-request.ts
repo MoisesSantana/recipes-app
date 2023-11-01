@@ -1,8 +1,6 @@
 import { ModalTypes } from '@/types/modal-types';
 import { handleFetchAllRecipes, handleFetchFilteredRecipes, handleFetchRecipeByIngredient, handleFetchRecipesByArea, handleFetchRecipesByCategory } from './fetch';
-import { SearchType } from '@/app/recipes/types';
-
-/* ModalTypes | '' */
+import { SearchType } from '@/types/search';
 
 function exploreRequests(selectedModal: ModalTypes, category: string) {
   if (selectedModal === ModalTypes.MEALS_INGREDIENT) return handleFetchRecipeByIngredient(true, category);

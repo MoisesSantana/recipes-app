@@ -8,6 +8,12 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/button';
 import { InputText } from '@/components/input-text';
 import { LoginInputs } from '@/types/forms';
+import { Alex_Brush } from 'next/font/google';
+
+const AlexBrush = Alex_Brush({
+  subsets: ['latin'],
+  weight: '400'
+});
 
 const signInFormSchema = z.object({
   email: z.string().email(),
@@ -33,7 +39,7 @@ export default function Home() {
   const isDisabled = !formState.isValid;
   return (
     <div className='bg-pink-50 min-h-screen h-full flex flex-col'>
-      <h1 className='text-2xl font-black text-rose-600 fixed left-1/2 -translate-x-1/2 top-20 drop-shadow-md'>Recipes App</h1>
+      <h1 className={`${AlexBrush.className} text-4xl text-rose-600 fixed left-1/2 -translate-x-1/2 top-36 drop-shadow-md`}>Recipes App</h1>
       <section className='w-full flex flex-1 items-center justify-center'>
         <form onSubmit={handleSubmit(handleSignIn)} className='flex flex-col w-full max-w-xl px-4'>
           <InputText name={LoginInputs.EMAIL} register={register} text={LoginInputs.EMAIL} isALoginPage />

@@ -1,8 +1,6 @@
 import { ModalTypes } from '@/types/modal-types';
 import { create } from 'zustand';
 
-/* ModalTypes | '' */
-
 type ModalState = {
   openSearchModal: boolean;
   openListModal: boolean;

@@ -7,6 +7,12 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Recipes App',
   description: 'Your Favorite Recipes App',
+  icons: {
+    icon: ['/favicon.ico?v=4'],
+    apple: ['/apple-touch-icon.png?v=4'],
+    shortcut: ['/apple-touch-icon.png?v=4'],
+  },
+  manifest: 'site.webmanifest',
 };
 
 export default function RootLayout({

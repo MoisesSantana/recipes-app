@@ -5,6 +5,12 @@ import { useState } from 'react';
 import { LinkCopied } from './link-copied';
 import { SearchButton } from './search-button';
 import { FavAndShare } from './fav-and-share';
+import { Alex_Brush } from 'next/font/google';
+
+const AlexBrush = Alex_Brush({
+  subsets: ['latin'],
+  weight: '400'
+});
 
 export function Header() {
   const [copied, setCopied] = useState(false);
@@ -26,7 +32,7 @@ export function Header() {
       <Link href='/profile'>
         <UserCircle size={32} fill='white' />
       </Link>
-      <h1 className='text-white text-2xl'>Recipes App</h1>
+      <h1 className={`${AlexBrush.className} text-white font-black text-2xl drop-shadow-md`}>Recipes App</h1>
       { haveSearch && <SearchButton />}
       { haveFavAndShare && <FavAndShare handleCopy={ handleCopy } />}
     </header>

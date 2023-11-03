@@ -162,5 +162,4 @@ export async function handleFetchRecipesByArea(area: string) {
   const recipes = formatRecipes(true, data);
   
   return recipes;
-  
 }

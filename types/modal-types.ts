@@ -13,11 +13,6 @@ export enum Titles {
   SEARCH = 'Search',
 }
 
-export enum CurrentModal {
-  LIST = 'list',
-  SEARCH = 'search',
-}
-
 export enum Buttons {
   MEALS_INGREDIENT = 'Meals Ingredients',
   DRINKS_INGREDIENT = 'Drinks Ingredients',

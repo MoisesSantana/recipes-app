@@ -13,7 +13,7 @@ export function switchRequest(
   pathname: string,
   selectedModal: ModalTypes,
   category: string,
-  searchType: SearchType,
+  searchType: SearchType | '',
   searchValue: string,
 ) {
   const isExplore = pathname.includes('explore');

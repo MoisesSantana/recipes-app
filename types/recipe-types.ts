@@ -5,7 +5,7 @@ export type CurrentRecipe = {
   category: string,
 }
 
-export type IngredientsAndMeasures = {
+type IngredientsAndMeasures = {
   ingredient: string;
   measure: string;
 }[]

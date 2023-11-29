@@ -13,7 +13,7 @@ export function SearchButton() {
         setOpenSearchModal();
       }}
     >
-      <MagnifyingGlass size={32} fill='white' />
+      <MagnifyingGlass data-testid="search-icon" size={32} fill='white' />
     </button>
   );
 }

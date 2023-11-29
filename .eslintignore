@@ -1,0 +1,7 @@
+# Ignore all files outside of the specified folders
+/*
+!/app/
+!/public/
+!/services/
+!/store/
+!/types/

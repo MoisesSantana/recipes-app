@@ -30,10 +30,10 @@ export function FavAndShare({ handleCopy }: FavAndShareProps) {
   return (
     <div className='flex'>
       <button onClick={ handleCopy }>
-        <ShareNetwork size={32} fill='white' />
+        <ShareNetwork data-testid="share-icon" size={32} fill='white' />
       </button>
       <button onClick={ handleFav }>
-        <Heart weight={ isFavorite ? 'fill' : 'regular' } size={32} fill='white' />
+        <Heart data-testid="fav-icon" weight={ isFavorite ? 'fill' : 'regular' } size={32} fill='white' />
       </button>
     </div>
   );

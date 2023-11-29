@@ -30,7 +30,7 @@ export function Header() {
     <header className="bg-rose-600 flex justify-between px-2 py-1 fixed w-full z-10">
       {copied && <LinkCopied />}
       <Link href='/profile'>
-        <UserCircle size={32} fill='white' />
+        <UserCircle data-testid="user-icon" size={32} fill='white' />
       </Link>
       <h1 className={`${AlexBrush.className} text-white font-black text-2xl drop-shadow-md`}>Recipes App</h1>
       { haveSearch && <SearchButton />}

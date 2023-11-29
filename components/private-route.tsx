@@ -12,6 +12,7 @@ type PrivateRouterProps = {
 
 export function PrivateRouter({ children }: PrivateRouterProps) {
   const [isClient, setIsClient] = useState(false);
+  console.log(useRouter())
   const { push } = useRouter();
   const userEmail = useProfileStore((state) => state.userEmail);
 
